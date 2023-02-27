@@ -36,20 +36,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.reader = void 0;
+exports.processor = void 0;
 var axios_1 = require("axios");
 var BigNumber = require('bignumber.js');
 BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_FLOOR });
 var readline = require('readline');
 function reader() {
     return __awaiter(this, void 0, void 0, function () {
-        var uniqueCase, currencies, output, rates, rl;
+        var currencies, uniqueCase, rates, rl;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    uniqueCase = false;
                     currencies = [];
-                    output = [];
+                    uniqueCase = false;
                     return [4 /*yield*/, getRates()];
                 case 1:
                     rates = _a.sent();
@@ -60,20 +59,7 @@ function reader() {
                     });
                     rl.on('line', function (line) {
                         if (uniqueCase) {
-                            var data = line.split(" ");
-                            var saleDecimalPlace = parseInt(data[1]);
-                            var purchaseCurrency = data[2];
-                            var coinPurchaseAmount = BigNumber(data[3]);
-                            var ethSale = BigNumber(data[0]);
-                            if (purchaseCurrency === "BTC") {
-                                ethSale *= BigNumber(currencies[0]).div(currencies[1]);
-                            }
-                            else if (purchaseCurrency === "DOGE") {
-                                ethSale *= BigNumber(currencies[2]).div(currencies[1]);
-                            }
-                            var saleOutput = (BigNumber(ethSale).times(coinPurchaseAmount)).toFixed(saleDecimalPlace);
-                            output.push(saleOutput);
-                            console.log(saleOutput);
+                            processor(line, currencies);
                         }
                         else {
                             // currencies = line.split(" ");
@@ -82,14 +68,30 @@ function reader() {
                     });
                     rl.on('close', function () {
                         console.log("\n", "--- End of conversion ---");
-                        // console.log(output)
                     });
-                    return [2 /*return*/, output];
+                    return [2 /*return*/];
             }
         });
     });
 }
-exports.reader = reader;
+function processor(line, currencies) {
+    var data = line.split(" ");
+    var saleDecimalPlace = parseInt(data[1]);
+    var purchaseCurrency = data[2];
+    var coinPurchaseAmount = BigNumber(data[3]);
+    var ethSale = BigNumber(data[0]);
+    if (purchaseCurrency === "BTC") {
+        ethSale *= BigNumber(currencies[0]).div(currencies[1]);
+    }
+    else if (purchaseCurrency === "DOGE") {
+        ethSale *= BigNumber(currencies[2]).div(currencies[1]);
+    }
+    var saleOutput = (BigNumber(ethSale).times(coinPurchaseAmount)).toFixed(saleDecimalPlace);
+    var output = saleOutput.toString();
+    console.log(saleOutput);
+    return output;
+}
+exports.processor = processor;
 function getRates() {
     var rates = axios_1["default"].get("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Cdogecoin&vs_currencies=usd&precision=18")
         .then(function (res) {
