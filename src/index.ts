@@ -3,7 +3,6 @@ const BigNumber = require('bignumber.js');
 BigNumber.config({ROUNDING_MODE: BigNumber.ROUND_FLOOR })
 const readline = require('readline');
 
-
 export async function reader(){
     let uniqueCase:boolean = false;
     let currencies:Array<string> = [];
@@ -28,7 +27,6 @@ export async function reader(){
         let ethSale:number = BigNumber(data[0]);
 
         if (purchaseCurrency === "BTC") {
-            console.log(currencies)
             ethSale *= BigNumber(currencies[0]).div(currencies[1]);
         } else if (purchaseCurrency === "DOGE") {
             ethSale *= BigNumber(currencies[2]).div(currencies[1]);
@@ -44,11 +42,13 @@ export async function reader(){
       }
 
     });
-
+    
     rl.on('close', () => {
         console.log("\n", "--- End of conversion ---");
-        console.log(output)
+        // console.log(output)
     });
+
+    return output
 }
 
 function getRates(){
@@ -59,4 +59,4 @@ function getRates(){
    return rates
 }
 
-reader()
+reader();

@@ -66,7 +66,6 @@ function reader() {
                             var coinPurchaseAmount = BigNumber(data[3]);
                             var ethSale = BigNumber(data[0]);
                             if (purchaseCurrency === "BTC") {
-                                console.log(currencies);
                                 ethSale *= BigNumber(currencies[0]).div(currencies[1]);
                             }
                             else if (purchaseCurrency === "DOGE") {
@@ -83,9 +82,9 @@ function reader() {
                     });
                     rl.on('close', function () {
                         console.log("\n", "--- End of conversion ---");
-                        console.log(output);
+                        // console.log(output)
                     });
-                    return [2 /*return*/];
+                    return [2 /*return*/, output];
             }
         });
     });
