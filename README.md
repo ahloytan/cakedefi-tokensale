@@ -8,3 +8,4 @@
 5. Data fetching using axios, from Coin Gecko
 6. Unit testing using JEST
 7. To get the same results as provided in (https://gist.github.com/benzumbrunn/84738476972c85614fe7520cf2274fc6), go to "index.ts", comment out line 9 & 10, uncomment line 22, follow step 2, and run step 3. Current results is base off live market spot rates of the cryptocurrency
+8. SALE amount is rounded down, instead of rounded off or rounded up to ensure that trades are fair and consistent. If trades were rounded up or rounded off, traders could potentially receive more or less cryptocurrency than they are entitled to, which could lead to unfair advantages or disadvantages.
